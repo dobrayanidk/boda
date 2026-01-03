@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Boda de Ana & Carlos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --gold:#d4af37;
+      --gold-dark:#b08a2e;
+      --bg:#fffdf7;
+      --text:#333;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Playfair Display', serif;
+      overflow-x: hidden;
+    }
+    /* Hero */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      text-align: center;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .background-video, .background-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.5));
+      z-index: -1;
+    }
+    .hero-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(3rem, 8vw, 6rem);
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+      margin-bottom: .2em;
+    }
+    .hero-date {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      letter-spacing: .5px;
+      margin-bottom: 1rem;
+    }
+    #contador {
+      font-size: clamp(1rem, 2.8vw, 1.6rem);
+      font-weight: 700;
+      color: var(--gold);
+      background: rgba(255,255,255,0.15);
+      display: inline-block;
+      padding: .6rem 1rem;
+      border-radius: 12px;
+      backdrop-filter: blur(2px);
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: #fff;
+      border: none;
+    }
+    .btn-gold:hover {
+      background: var(--gold-dark);
+      color:#fff;
+    }
+    /* Headings */
+    h2 {
+      font-family: 'Great Vibes', cursive;
+      color: var(--gold);
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: .75rem;
+      text-align: center;
+    }
+    .section-subtitle{
+      text-align:center;
+      color:#666;
+      margin-bottom:1.5rem;
+    }
+    /* Cards, gallery, timeline */
+    .soft-card {
+      background: #fff;
+      border: 1px solid rgba(212,175,55,0.25);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      padding: 1.5rem;
+    }
+    .timeline {
+      border-left: 3px solid var(--gold);
+      padding-left: 1rem;
+    }
+    .timeline-item {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -1.35rem;
+      top: .35rem;
+      width: 12px; height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(212,175,55,0.2);
+    }
+    .gallery-img {
+      border-radius: 16px;
+      border: 2px solid rgba(212,175,55,0.35);
+    }
+    /* Footer */
+    footer {
+      background: linear-gradient(to right, var(--gold), #f5e6c4);
+      text-align: center;
+      padding: 24px;
+      color: #fff;
+      margin-top: 40px;
+    }
+    /* Scroll animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* RSVP success */
+    .alert-fixed {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 20px;
+      z-index: 1050;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    /* Utility spacing */
+    .section {
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero (usa video si existe; si no, usa imagen de respaldo) -->
+  <header class="hero">
+    <!-- Video fondo (opcional) -->
+    <video autoplay muted loop playsinline class="background-video">
+      <source src="video-boda.mp4" type="video/mp4">
+    </video>
+    <!-- Imagen de respaldo si no hay video -->
+    <img src="hero.jpg" alt="Fondo de boda" class="background-image" onerror="this.style.display='none'">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <h1 class="hero-title">Ana & Carlos</h1>
+      <p class="hero-date">2 de Febrero, 2026 • Ciudad de México</p>
+      <div id="contador" class="mb-3">Cargando…</div><br>
+      <a href="#detalles" class="btn btn-gold btn-lg mt-2">Ver detalles</a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Nuestra historia -->
+    <section class="section fade-in">
+      <h2>Nuestra historia</h2>
+      <p class="section-subtitle">Un recorrido por los momentos que nos trajeron hasta aquí.</p>
+      <div id="carouselHistoria" class="carousel slide soft-card">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="historia1.jpg" class="d-block w-100 gallery-img" alt="Historia 1">
+            <div class="carousel-caption d-none d-md-block">
+              <p>Nos conocimos en la universidad y desde entonces compartimos sueños, risas y aventuras.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="historia2.jpg" class="d-block w-100 gallery-img" alt="Historia 2">
+            <div class="carousel-caption d-none d-md-block">
+              <p>El primer viaje juntos, donde supimos que queríamos construir un futuro.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="historia3.jpg" class="d-block w-100 gallery-img" alt="Historia 3">
+            <div class="carousel-caption d-none d-md-block">
+              <p>La propuesta, el sí, y el comienzo de esta nueva etapa.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselHistoria" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselHistoria" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Itinerario del gran día -->
+    <section id="detalles" class="section fade-in">
+      <h2>Itinerario del gran día</h2>
+      <p class="section-subtitle">Para que no te pierdas de nada.</p>
+      <div class="row">
+        <div class="col-lg-8 mx-auto soft-card">
+          <div class="timeline">
+            <div class="timeline-item"><strong>⛪ 4:00 PM</strong> • Ceremonia en la iglesia</div>
+            <div class="timeline-item"><strong>📸 5:30 PM</strong> • Sesión de fotos</div>
+            <div class="timeline-item"><strong>🍽️ 6:00 PM</strong> • Cena en el salón</div>
+            <div class="timeline-item"><strong>💃 8:00 PM</strong> • Baile y fiesta</div>
+            <div class="timeline-item"><strong>🎂 10:00 PM</strong> • Corte del pastel</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Padrinos y damas de honor -->
+    <section class="section fade-in">
+      <h2>Padrinos y damas de honor</h2>
+      <p class="section-subtitle">Personas que han sido parte esencial del camino.</p>
+      <div class="row g-4">
+        <div class="col-6 col-md-3 text-center">
+          <img src="padrino1.jpg" class="img-fluid rounded-circle mb-2" alt="Padrino 1">
+          <p><strong>Juan Pérez</strong><br>Padrino de boda</p>
+        </div>
+        <div class="col-6 col-md-3 text-center">
+          <img src="dama1.jpg" class="img-fluid rounded-circle mb-2" alt="Dama 1">
+          <p><strong>María López</strong><br>Dama de honor</p>
+        </div>
+        <div class="col-6 col-md-3 text-center">
+          <img src="padrino2.jpg" class="img-fluid rounded-circle mb-2" alt="Padrino 2">
+          <p><strong>Carlos Ruiz</strong><br>Padrino</p>
+        </div>
+        <div class="col-6 col-md-3 text-center">
+          <img src="dama2.jpg" class="img-fluid rounded-circle mb-2" alt="Dama 2">
+          <p><strong>Ana Gómez</strong><br>Dama de honor</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RSVP (sin backend, con confirmación visual y almacenamiento local) -->
+<!-- RSVP -->
+<!-- Sección RSVP -->
+<section id="rsvp" class="section fade-in">
+  <h2 class="text-center">Confirma tu asistencia</h2>
+  <p class="section-subtitle text-center">Tu presencia es lo más importante para nosotros.</p>
+  <div class="row">
+    <div class="col-lg-8 mx-auto soft-card">
+      <form id="rsvpForm" class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombre</label>
+          <input type="text" class="form-control" name="nombre" placeholder="Tu nombre completo" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">¿Asistirás?</label>
+          <select class="form-select" name="asistencia" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option value="Sí">Sí</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">Mensaje (opcional)</label>
+          <textarea class="form-control" name="mensaje" rows="3" placeholder="¿Quieres dejarnos una nota especial?"></textarea>
+        </div>
+        <div class="col-12 text-center">
+          <button type="submit" class="btn btn-gold">Enviar confirmación</button>
+        </div>
+      </form>
+      <div id="rsvpSuccess" class="alert alert-success mt-3 d-none text-center">
+        ¡Gracias! Tu confirmación ha sido enviada con éxito.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
+<script>
+  // Inicializa EmailJS con tu clave pública
+  emailjs.init("1jCbrP1C17a5EktUu"); // ← tu clave pública real
+
+  // Manejo del envío del formulario
+  document.getElementById("rsvpForm").addEventListener("submit", function(e) {
+    e.preventDefault(); // evita que la página se recargue
+
+emailjs.sendForm("service_w379wwo", "template_q37pi4n", this)      .then(() => {
+        document.getElementById("rsvpSuccess").classList.remove("d-none");
+        this.reset();
+      }, (error) => {
+        alert("Hubo un error al enviar la confirmación. Intenta nuevamente.");
+        console.error("EmailJS error:", error);
+      });
+  });
+</script>
+    <!-- Galería en carrusel -->
+    <section class="section fade-in">
+      <h2>Galería</h2>
+      <p class="section-subtitle">Instantes que queremos atesorar.</p>
+      <div id="carouselGaleria" class="carousel slide soft-card">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="foto1.jpg" class="d-block w-100 gallery-img" alt="Foto 1">
+          </div>
+          <div class="carousel-item">
+            <img src="foto2.jpg" class="d-block w-100 gallery-img" alt="Foto 2">
+          </div>
+          <div class="carousel-item">
+            <img src="foto3.jpg" class="d-block w-100 gallery-img" alt="Foto 3">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselGaleria" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselGaleria" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Libro de visitas (almacenado en localStorage) -->
+    <section class="section fade-in">
+      <h2>Libro de visitas</h2>
+      <p class="section-subtitle">Déjanos tus buenos deseos.</p>
+      <div class="row">
+        <div class="col-lg-8 mx-auto soft-card">
+          <form id="guestbookForm" class="mb-3">
+            <input type="text" class="form-control mb-2" name="nombre" placeholder="Tu nombre" required>
+            <textarea class="form-control mb-2" name="mensaje" placeholder="Tu mensaje" required></textarea>
+            <button type="submit" class="btn btn-gold">Enviar mensaje</button>
+          </form>
+          <div id="messages" class="list-group"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Playlist de Spotify -->
+    <section class="section fade-in">
+      <h2>Nuestra playlist</h2>
+      <p class="section-subtitle">Canciones que cuentan nuestra historia.</p>
+      <div class="soft-card">
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/XXXXXXXX" width="100%" height="380" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </div>
+    </section>
+
+    <!-- Mesa de regalos -->
+    <section class="section fade-in">
+      <h2>Mesa de regalos</h2>
+      <p class="section-subtitle">Gracias por apoyar nuestros primeros pasos juntos.</p>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="soft-card">
+            <p>🎁 Lista en Amazon</p>
+            <a class="btn btn-gold" href="https://www.amazon.com" target="_blank" rel="noopener">Ver lista</a>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="soft-card">
+            <p>🎁 Lista en Liverpool</p>
+            <a class="btn btn-gold" href="https://www.liverpool.com.mx" target="_blank" rel="noopener">Ver lista</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ubicación y cómo llegar -->
+    <section class="section fade-in">
+      <h2>Ubicación</h2>
+      <p class="section-subtitle">Te esperamos para celebrar juntos.</p>
+      <div class="soft-card">
+        <div class="ratio ratio-16x9 mb-3">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18..." style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <a class="btn btn-gold" href="https://maps.google.com?q=Salón Jardines del Sol" target="_blank" rel="noopener">Cómo llegar</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="fade-in">
+    <p>Con amor, Ana & Carlos 💕</p>
+  </footer>
+
+  <!-- Notificación -->
+  <div id="alert" class="alert alert-success alert-fixed d-none" role="alert">
+    ¡Gracias! Hemos recibido tu confirmación.
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Contador regresivo
+    const fechaBoda = new Date("Feb 2, 2026 17:00:00").getTime();
+    const contadorEl = document.getElementById("contador");
+    const timer = setInterval(() => {
+      const ahora = Date.now();
+      const distancia = fechaBoda - ahora;
+      if (distancia <= 0) {
+        clearInterval(timer);
+        contadorEl.textContent = "¡Hoy es el gran día!";
+        return;
+      }
+      const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+      contadorEl.textContent = `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+    }, 1000);
+
+    // Animaciones al hacer scroll
+    const elements = document.querySelectorAll('.fade-in');
+    const onScrollReveal = () => {
+      const vh = window.innerHeight;
+      elements.forEach(el => {
+        const top = el.getBoundingClientRect().top;
+        if (top < vh - 100) el.classList.add('visible');
+      });
+    };
+    window.addEventListener('scroll', onScrollReveal);
+    window.addEventListener('load', onScrollReveal);
+
+    // RSVP local (demo sin backend)
+    const rsvpForm = document.getElementById('rsvpForm');
+    const rsvpList = document.getElementById('rsvpList');
+    const alertEl = document.getElementById('alert');
+
+    const loadRSVP = () => {
+      const data = JSON.parse(localStorage.getItem('rsvp') || '[]');
+      rsvpList.innerHTML = '';
+      if (data.length) {
+        const list = document.createElement('div');
+        list.className = 'list-group';
+        data.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'list-group-item';
+          row.innerHTML = `<strong>${item.nombre}</strong> — ${item.asistencia}${item.mensaje ? ' • ' + item.mensaje : ''}`;
+          list.appendChild(row);
+        });
+        rsvpList.appendChild(list);
+      }
+    };
+    loadRSVP();
+
+    rsvpForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(rsvpForm);
+      const entry = {
+        nombre: formData.get('nombre').trim(),
+        asistencia: formData.get('asistencia'),
+        mensaje: (formData.get('mensaje') || '').trim()
+      };
+      if (!entry.nombre || !entry.asistencia) return;
+      const data = JSON.parse(localStorage.getItem('rsvp') || '[]');
+      data.push(entry);
+      localStorage.setItem('rsvp', JSON.stringify(data));
+      rsvpForm.reset();
+      loadRSVP();
+      alertEl.classList.remove('d-none');
+      setTimeout(() => alertEl.classList.add('d-none'), 2500);
+    });
+
+    // Libro de visitas (localStorage)
+    const guestbookForm = document.getElementById('guestbookForm');
+    const messagesEl = document.getElementById('messages');
+
+    const loadMessages = () => {
+      const msgs = JSON.parse(localStorage.getItem('guestbook') || '[]');
+      messagesEl.innerHTML = '';
+      if (msgs.length) {
+        msgs.forEach(m => {
+          const item = document.createElement('div');
+          item.className = 'list-group-item';
+          item.innerHTML = `<strong>${m.nombre}:</strong> ${m.mensaje}`;
+          messagesEl.appendChild(item);
+        });
+      }
+    };
+    loadMessages();
+
+    guestbookForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const fd = new FormData(guestbookForm);
+      const nombre = (fd.get('nombre') || '').trim();
+      const mensaje = (fd.get('mensaje') || '').trim();
+      if (!nombre || !mensaje) return;
+      const msgs = JSON.parse(localStorage.getItem('guestbook') || '[]');
+      msgs.push({ nombre, mensaje });
+      localStorage.setItem('guestbook', JSON.stringify(msgs));
+      guestbookForm.reset();
+      loadMessages();
+    });
+  </script>
+</body>
+</html>
