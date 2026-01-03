@@ -286,24 +286,35 @@
 </section>
 
 <!-- EmailJS SDK -->
+<!-- EmailJS SDK -->
 <script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
+
 <script>
-  // Inicializa EmailJS con tu clave pública
-  emailjs.init("1jCbrP1C17a5EktUu"); // ← tu clave pública real
+(function () {
+  emailjs.init("1jCbrP1C17a5EktUu"); // TU CLAVE PÚBLICA
+})();
 
-  // Manejo del envío del formulario
-  document.getElementById("rsvpForm").addEventListener("submit", function(e) {
-    e.preventDefault(); // evita que la página se recargue
+document.getElementById("rsvpForm").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-emailjs.sendForm("service_w379wwo", "template_q37pi4n", this)      .then(() => {
-        document.getElementById("rsvpSuccess").classList.remove("d-none");
-        this.reset();
-      }, (error) => {
-        alert("Hubo un error al enviar la confirmación. Intenta nuevamente.");
-        console.error("EmailJS error:", error);
-      });
+  emailjs.sendForm(
+    "service_w379wwo",      // Service ID
+    "template_q37pi4n",     // Template ID
+    this,
+    "1jCbrP1C17a5EktUu"     // 👈 CLAVE PÚBLICA OBLIGATORIA
+  )
+  .then(() => {
+    document.getElementById("rsvpSuccess").classList.remove("d-none");
+    this.reset();
+  })
+  .catch((error) => {
+    console.error("EmailJS ERROR:", error);
+    alert("Error al enviar. Revisa la consola.");
   });
+});
 </script>
+
+
     <!-- Galería en carrusel -->
     <section class="section fade-in">
       <h2>Galería</h2>
