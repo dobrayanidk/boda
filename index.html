@@ -284,32 +284,37 @@
     </div>
   </div>
 </section>
-<!-- EmailJS SDK -->
-<script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
-<script>
-  emailjs.init("1jCbrP1C17a5EktUu"); // tu clave pública
-</script>
 
-<!-- EmailJS SDK -->
-<!-- EmailJS SDK -->
-<script>
-document.getElementById("rsvpForm").addEventListener("submit", function(e) {
-  e.preventDefault();
 
-  emailjs.sendForm(
-    "service_mrsgdof",     // ✅ ESTE ES TU SERVICIO REAL
-    "template_q37pi4n",    // ✅ tu template
-    this
-  ).then(() => {
-    document.getElementById("rsvpSuccess").classList.remove("d-none");
-    this.reset();
-  }).catch((error) => {
-    alert("Error al enviar. Revisa la consola.");
-    console.error("EmailJS error:", error);
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+window.addEventListener("load", function () {
+
+  emailjs.init("1jCbrP1C17a5EktUu"); // PUBLIC KEY
+
+  const rsvpForm = document.getElementById("rsvpForm");
+
+  rsvpForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    emailjs.sendForm(
+      "service_mrsgdof",   // SERVICE ID
+      "template_q37pi4n",  // TEMPLATE ID
+      this
+    ).then(() => {
+      document.getElementById("rsvpSuccess").classList.remove("d-none");
+      this.reset();
+    }).catch((error) => {
+      console.error("EmailJS error:", error);
+      alert("No se pudo enviar la confirmación");
+    });
+
   });
+
 });
 </script>
-
 
 
     <!-- Galería en carrusel -->
@@ -439,45 +444,9 @@ document.getElementById("rsvpForm").addEventListener("submit", function(e) {
     window.addEventListener('scroll', onScrollReveal);
     window.addEventListener('load', onScrollReveal);
 
-    // RSVP local (demo sin backend)
-    const rsvpForm = document.getElementById('rsvpForm');
-    const rsvpList = document.getElementById('rsvpList');
-    const alertEl = document.getElementById('alert');
 
-    const loadRSVP = () => {
-      const data = JSON.parse(localStorage.getItem('rsvp') || '[]');
-      rsvpList.innerHTML = '';
-      if (data.length) {
-        const list = document.createElement('div');
-        list.className = 'list-group';
-        data.forEach(item => {
-          const row = document.createElement('div');
-          row.className = 'list-group-item';
-          row.innerHTML = `<strong>${item.nombre}</strong> — ${item.asistencia}${item.mensaje ? ' • ' + item.mensaje : ''}`;
-          list.appendChild(row);
-        });
-        rsvpList.appendChild(list);
-      }
-    };
-    loadRSVP();
 
-    rsvpForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const formData = new FormData(rsvpForm);
-      const entry = {
-        nombre: formData.get('nombre').trim(),
-        asistencia: formData.get('asistencia'),
-        mensaje: (formData.get('mensaje') || '').trim()
-      };
-      if (!entry.nombre || !entry.asistencia) return;
-      const data = JSON.parse(localStorage.getItem('rsvp') || '[]');
-      data.push(entry);
-      localStorage.setItem('rsvp', JSON.stringify(data));
-      rsvpForm.reset();
-      loadRSVP();
-      alertEl.classList.remove('d-none');
-      setTimeout(() => alertEl.classList.add('d-none'), 2500);
-    });
+   
 
     // Libro de visitas (localStorage)
     const guestbookForm = document.getElementById('guestbookForm');
