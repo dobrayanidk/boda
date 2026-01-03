@@ -284,35 +284,32 @@
     </div>
   </div>
 </section>
-
-<!-- EmailJS SDK -->
 <!-- EmailJS SDK -->
 <script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
-
 <script>
-(function () {
-  emailjs.init("1jCbrP1C17a5EktUu"); // TU CLAVE PÚBLICA
-})();
+  emailjs.init("1jCbrP1C17a5EktUu"); // tu clave pública
+</script>
 
-document.getElementById("rsvpForm").addEventListener("submit", function (e) {
+<!-- EmailJS SDK -->
+<!-- EmailJS SDK -->
+<script>
+document.getElementById("rsvpForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
   emailjs.sendForm(
-    "service_mrsgdof",      // Service ID
-    "template_q37pi4n",     // Template ID
-    this,
-    "1jCbrP1C17a5EktUu"     // 👈 CLAVE PÚBLICA OBLIGATORIA
-  )
-  .then(() => {
+    "service_mrsgdof",     // ✅ ESTE ES TU SERVICIO REAL
+    "template_q37pi4n",    // ✅ tu template
+    this
+  ).then(() => {
     document.getElementById("rsvpSuccess").classList.remove("d-none");
     this.reset();
-  })
-  .catch((error) => {
-    console.error("EmailJS ERROR:", error);
+  }).catch((error) => {
     alert("Error al enviar. Revisa la consola.");
+    console.error("EmailJS error:", error);
   });
 });
 </script>
+
 
 
     <!-- Galería en carrusel -->
@@ -515,4 +512,3 @@ document.getElementById("rsvpForm").addEventListener("submit", function (e) {
   </script>
 </body>
 </html>
-
