@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Boda de Ari & Angel</title>
+  <title>Boda de Ana & Carlos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -151,6 +151,21 @@
       margin-top: 3rem;
       margin-bottom: 3rem;
     }
+    .guest-anim {
+  animation: guestIn .6s ease forwards;
+}
+
+@keyframes guestIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
   </style>
 </head>
 <body>
@@ -317,30 +332,41 @@ window.addEventListener("load", function () {
 </script>
 
 
-    <!-- Galería en carrusel -->
-    <section class="section fade-in">
-      <h2>Galería</h2>
-      <p class="section-subtitle">Instantes que queremos atesorar.</p>
-      <div id="carouselGaleria" class="carousel slide soft-card">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="foto1.jpg" class="d-block w-100 gallery-img" alt="Foto 1">
-          </div>
-          <div class="carousel-item">
-            <img src="foto2.jpg" class="d-block w-100 gallery-img" alt="Foto 2">
-          </div>
-          <div class="carousel-item">
-            <img src="foto3.jpg" class="d-block w-100 gallery-img" alt="Foto 3">
-          </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselGaleria" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselGaleria" data-bs-slide="next">
-          <span class="carousel-control-next-icon"></span>
-        </button>
-      </div>
-    </section>
+<section class="section fade-in">
+  <h2>Galería</h2>
+  <p class="section-subtitle">Instantes que queremos atesorar.</p>
+
+  <div id="carouselGaleria" class="carousel slide soft-card" data-bs-ride="carousel">
+    <div class="carousel-inner" id="galeriaCarousel"></div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselGaleria" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselGaleria" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+</section>
+<script>
+const imagenesGaleria = [
+  "galeria/foto1.jpg",
+  "galeria/foto2.jpg",
+  "galeria/foto3.jpg",
+  "galeria/foto4.jpg"
+];
+
+const contenedor = document.getElementById("galeriaCarousel");
+
+imagenesGaleria.forEach((src, index) => {
+  const item = document.createElement("div");
+  item.className = "carousel-item" + (index === 0 ? " active" : "");
+  item.innerHTML = `
+    <img src="${src}" class="d-block w-100 gallery-img" alt="Foto ${index + 1}">
+  `;
+  contenedor.appendChild(item);
+});
+</script>
+
 
     <!-- Libro de visitas (almacenado en localStorage) -->
     <section class="section fade-in">
@@ -363,7 +389,7 @@ window.addEventListener("load", function () {
       <h2>Nuestra playlist</h2>
       <p class="section-subtitle">Canciones que cuentan nuestra historia.</p>
       <div class="soft-card">
-        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/XXXXXXXX" width="100%" height="380" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5ZlxURjrxztGP1taVS1GB8?si=4PD7bnPgQeW3h0Hwfx9zAQ" width="100%" height="380" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
       </div>
     </section>
 
@@ -402,7 +428,7 @@ window.addEventListener("load", function () {
   </main>
 
   <footer class="fade-in">
-    <p>Con amor, Ari & Angel 💕</p>
+    <p>Con amor, Ana & Carlos 💕</p>
   </footer>
 
   <!-- Notificación -->
@@ -414,8 +440,9 @@ window.addEventListener("load", function () {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
+  
     // Contador regresivo
-    const fechaBoda = new Date("Feb 2, 2026 17:00:00").getTime();
+    const fechaBoda = new Date("Feb 14, 2026 17:00:00").getTime();
     const contadorEl = document.getElementById("contador");
     const timer = setInterval(() => {
       const ahora = Date.now();
@@ -448,38 +475,101 @@ window.addEventListener("load", function () {
 
    
 
-    // Libro de visitas (localStorage)
-    const guestbookForm = document.getElementById('guestbookForm');
-    const messagesEl = document.getElementById('messages');
+   
+  </script>
+  
+  <!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    query,
+    orderBy,
+    onSnapshot,
+    serverTimestamp,
+    deleteDoc,
+    doc
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const loadMessages = () => {
-      const msgs = JSON.parse(localStorage.getItem('guestbook') || '[]');
-      messagesEl.innerHTML = '';
-      if (msgs.length) {
-        msgs.forEach(m => {
-          const item = document.createElement('div');
-          item.className = 'list-group-item';
-          item.innerHTML = `<strong>${m.nombre}:</strong> ${m.mensaje}`;
-          messagesEl.appendChild(item);
+  // 🔥 CONFIG FIREBASE
+  const firebaseConfig = {
+    apiKey: "AIzaSyBoYrCc9c7A7lL8LYXNitfTotC9T6biRNU",
+    authDomain: "boda-53950.firebaseapp.com",
+    projectId: "boda-53950",
+    storageBucket: "boda-53950.firebasestorage.app",
+    messagingSenderId: "143480948718",
+    appId: "1:143480948718:web:16ed441d1155f13460f0ff"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // ⚙️ ADMIN (temporal)
+  const isAdmin = localStorage.getItem("admin") === "true";
+
+  const guestbookForm = document.getElementById("guestbookForm");
+  const messagesEl = document.getElementById("messages");
+
+  // 📡 ESCUCHAR MENSAJES EN TIEMPO REAL
+  const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
+
+  onSnapshot(q, (snapshot) => {
+    messagesEl.innerHTML = "";
+
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+
+      const item = document.createElement("div");
+      item.className = "list-group-item guest-anim";
+
+      let fechaTexto = "";
+      if (data.createdAt) {
+        fechaTexto = data.createdAt.toDate().toLocaleString("es-MX", {
+          dateStyle: "medium",
+          timeStyle: "short"
         });
       }
-    };
-    loadMessages();
 
-    guestbookForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const fd = new FormData(guestbookForm);
-      const nombre = (fd.get('nombre') || '').trim();
-      const mensaje = (fd.get('mensaje') || '').trim();
-      if (!nombre || !mensaje) return;
-      const msgs = JSON.parse(localStorage.getItem('guestbook') || '[]');
-      msgs.push({ nombre, mensaje });
-      localStorage.setItem('guestbook', JSON.stringify(msgs));
-      guestbookForm.reset();
-      loadMessages();
+      item.innerHTML = `
+        <strong>${data.nombre}</strong>
+        <div style="font-size:13px; opacity:.7;">${fechaTexto}</div>
+        <div style="margin-top:6px;">${data.mensaje}</div>
+        ${isAdmin ? `<button class="btn btn-sm btn-danger mt-2">Eliminar</button>` : ""}
+      `;
+
+      // 🗑️ BORRAR (solo admin)
+      if (isAdmin) {
+        item.querySelector("button").addEventListener("click", async () => {
+          if (confirm("¿Eliminar mensaje?")) {
+            await deleteDoc(doc(db, "guestbook", docSnap.id));
+          }
+        });
+      }
+
+      messagesEl.appendChild(item);
     });
-  </script>
+  });
+
+  // ✉️ ENVIAR MENSAJE
+  guestbookForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const nombre = guestbookForm.nombre.value.trim();
+    const mensaje = guestbookForm.mensaje.value.trim();
+    if (!nombre || !mensaje) return;
+
+    await addDoc(collection(db, "guestbook"), {
+      nombre,
+      mensaje,
+      createdAt: serverTimestamp()
+    });
+
+    guestbookForm.reset();
+  });
+</script>
+
 </body>
 </html>
-
 
